@@ -1,0 +1,65 @@
+version: "3.7"
+
+services:  
+    # ros_base:
+    #     build:
+    #         context: .
+    #         dockerfile: ./Dockerfile/ros_base.Dockerfile  
+    #     network_mode: "host"              
+    #     container_name: ros_base     
+
+    # ros_pcl:
+    #    build:
+    #        context: .
+    #        dockerfile: ./Dockerfile/ros_pcl.Dockerfile  
+    #    network_mode: "host"              
+    #    container_name: ros_pcl         
+
+    # ros_opencv:
+    #        build:
+    #            context: .
+    #            dockerfile: ./Dockerfile/ros_opencv.Dockerfile
+    #        network_mode: "host"
+    #        ports:
+    #            - "1883:1883"
+            
+    #     #    volumes:
+    #     #        - "/home/zhushi/work/chassis/chs_ros2/4wheels/src:/ws/src"
+
+    #         # devices:
+    #         # #    - "dev/bus/usb:/dev/bus/usb"
+    #         # #    - "dev/gpiochip0:/dev/gpiochip0"
+    #         # #    - "/dev/InclinometerPort:/dev/InclinometerPort"
+    #         # #    - "/dev/motor:/dev/motor"
+    #         #    - "/dev/rplidar:/dev/rplidar"
+    #         #    - "/dev/slave_com:/dev/slave_com"
+    #        container_name: ros_opencv
+    #     #    entrypoint: /ros_entrypoint.sh
+
+    ros1_build:
+       build:
+           context: .
+           dockerfile: ./Dockerfile/ros_build.Dockerfile     
+    #    depends_on: 
+    #        - ros_opencv         
+       container_name: ros1_build
+
+    # ros_test1:
+    #    build:
+    #        context: .
+    #        dockerfile: ./Dockerfile/ros_featureB_test.Dockerfile   
+    #    network_mode: "host" 
+    #    ports:
+    #        - "1883:1883" 
+    #     volumes:
+    #     #    - /media/hw/Linux/sharedir/study/prj/chassis/src:/ws/src
+    #         - /home/zhushi/work/chassis/ros1_ws/chassis/src/:/ws/src
+    # #    devices:
+    # #        - "dev/bus/usb:/dev/bus/usb"
+    # #        - "dev/gpiochip0:/dev/gpiochip0"
+    # #         - "/dev/InclinometerPort:/dev/InclinometerPort"
+    # #         - "/dev/motor:/dev/motor"
+    #    depends_on: 
+    #        - ros_build11          
+    #    container_name: ros_test1
+

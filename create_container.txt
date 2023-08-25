@@ -1,0 +1,1 @@
+docker run -itd --network host --name ros1_build1 ros:noetic

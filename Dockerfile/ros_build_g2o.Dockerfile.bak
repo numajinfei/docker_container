@@ -1,0 +1,28 @@
+FROM ros:noetic
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  # install additional ros pkgs
+  ros-noetic-ecl-threads \
+  ros-noetic-filters \
+
+RUN wget -O g2o.tar.gz https://github.com/RainerKuemmerle/g2o/archive/refs/tags/20200410_git.tar.gz \
+  && tar -xzf g2o.tar.gz \
+  && rm g2o.tar.gz \
+  && cd g2o-20200410_git \
+  # && sed -i 's?NOT "${ARCH}" MATCHES "arm"?CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "x86_64"?g' CMakeLists.txt \
+  && sed -i 's?OR CMAKE_COMPILER_IS_GNUCXX?OR CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "x86_64"?g' CMakeLists.txt \
+  && sed -i '18i MESSAGE(STATUS "[ARCH] is ====>: ${ARCH}, ${CMAKE_HOST_SYSTEM_PROCESSOR}")' CMakeLists.txt \ 
+  # && cd .. \
+  # && mkdir build \
+  && pwd \
+  # && cd build \
+  && pwd \
+  # && ls /opt/ros/noetic \
+  # && tar -xzf g2o.tar.gz \
+  # && rm g2o.tar.gz \
+  && cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic/ \
+    -S /g2o-20200410_git/ \
+    -Bbuild \
+  && cmake --build build/ --target install 
