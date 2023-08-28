@@ -45,12 +45,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-pip \
   && rm -rf /var/lib/apt/lists/* \
 # AI rependence packages:
-  # && pip3 install opencv-python \
-  # && pip3 install torch torchvision torchaudio \
-  && pip3 install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple \
-  && pip3 install torch torchvision torchaudio -i https://pypi.tuna.tsinghua.edu.cn/simple \
-  && pip3 install torchsummary tqdm
-
+  && pip3 install opencv-python \
+  && pip3 install torch torchvision torchaudio \
+  && pip3 install ultralytics torchsummary \
+  # && pip3 install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  # && pip3 install torch torchvision torchaudio -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  && pip3 install Pillow requests minio fastapi uvicorn pydantic
+ 
 
 
 # Install nlohmann json
