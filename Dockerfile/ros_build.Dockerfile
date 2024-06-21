@@ -25,15 +25,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # nav and pcl:
   ros-${ROS_DISTRO}-pcl-conversions \
   ros-${ROS_DISTRO}-bondcpp \
-  # ros-${ROS_DISTRO}-test-msgs \
-#   ros-${ROS_DISTRO}-behaviortree-cpp-v3 \
-  # ros-${ROS_DISTRO}-rviz-common \
-  # ros-${ROS_DISTRO}-rviz-default-plugins \
   ros-${ROS_DISTRO}-angles \
-#   ros-${ROS_DISTRO}-cv-bridge \
   ros-${ROS_DISTRO}-ompl \
   ros-${ROS_DISTRO}-image-transport \
-#   ros-${ROS_DISTRO}-gazebo-ros-pkgs \
   ros-${ROS_DISTRO}-libg2o \
   ros-${ROS_DISTRO}-laser-geometry \
   ros-${ROS_DISTRO}-pcl-ros \
@@ -41,11 +35,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ros-${ROS_DISTRO}-tf2-geometry-msgs \
 #   ros-${ROS_DISTRO}-move-base \
   ros-${ROS_DISTRO}-map-msgs \
-  # ros-${ROS_DISTRO}-orocos-bfl \
-#   ros-${ROS_DISTRO}-ros-control \
-#   ros-${ROS_DISTRO}-ros-controllers \
-#   ros-${ROS_DISTRO}-velocity-controllers \
-#   ros-${ROS_DISTRO}-view-controller-msgs \
   liborocos-bfl-dev \
   graphicsmagick* \
   libsuitesparse-dev \
@@ -66,14 +55,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-pip \
   && rm -rf /var/lib/apt/lists/* \
 # AI/py dependence packages:
-  && pip3 install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  && pip3 install opencv-python
+#   && pip3 install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple \
   && pip3 install Sphinx
-#   && pip3 install torch torchvision torchaudio \
-#   && pip3 install ultralytics torchsummary \
-  # && pip3 install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple \
-  # && pip3 install torch torchvision torchaudio -i https://pypi.tuna.tsinghua.edu.cn/simple \
-#   && pip3 install Pillow requests minio fastapi uvicorn pydantic
- 
+
 # Install protobuf
 RUN git clone -b v3.6.0 https://github.com/protocolbuffers/protobuf.git \
   && cd protobuf \
@@ -81,24 +66,12 @@ RUN git clone -b v3.6.0 https://github.com/protocolbuffers/protobuf.git \
   && ./autogen.sh \
   && ./configure \
   && make \
-#   && make check \
   && make install \
   && ldconfig \
   && rm protobuf -rf \
   && protoc --version
 
 # Install ceres-slover
-# RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
-#   && tar -zxvf ceres-solver-2.1.0.tar.gz \
-#   && cd ceres-solver-2.1.0 \
-#   && mkdir build \
-#   && cd build \
-#   && cmake -DMINIGLOG=ON .. -G Ninja \
-#   && ninja -j2 \
-#   && CTEST_OUTPUT_ON_FAILURE=1 ninja test \
-#   && ninja install \
-#   && rm ceres-solver-2.1.0* -rf
-
 RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
   && tar -zxvf ceres-solver-2.1.0.tar.gz \
   && cd ceres-solver-2.1.0 \
@@ -107,27 +80,6 @@ RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
   && cmake ..  \
   && make install \
   && rm ceres-solver-2.1.0* -rf && ldconfig
-
-# Install cartographer and cartographer_ros
-# RUN rosdep init && rosdep update \
-#   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
-#   && mkdir /carto/src -p && cd /carto/src \
-#   && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
-#   && tar -zxvf 2.0.0.tar.gz \
-#   && cd cartographer-2.0.0/scripts \
-#   && ./install_abseil.sh \
-#   && cd .. && mkdir build && cd build \
-#   && cmake .. && make \
-#   && make test && make install \  
-# #... install cartographer_ros
-#   && cd /carto/src \
-#   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
-#   && tar -zxvf 1.0.0.tar.gz \
-#   && cd /carto \
-#   && /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash' \
-#   && catkin_make_isolated --install \
-#   && ls 
-# #   && rm 2.0.0.tar.gz  1.0.0.tar.gz \
 
 # Install cartographer and cartographer_ros
 RUN rosdep init && rosdep update \
@@ -145,10 +97,11 @@ RUN rosdep init && rosdep update \
   && cmake .. && make \
   && make test && make install
 
+WORKDIR /carto
+RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install'
 
 # Install nlohmann json
 RUN wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp \
-# RUN wget https://github.com/numajinfei/vision/releases/download/v0.0.1-3rdparty/json.hpp \
   && mkdir -p /usr/local/include/nlohmann \
   && mv json.hpp /usr/local/include/nlohmann/json.hpp
 
@@ -181,24 +134,6 @@ RUN wget -O paho.mqtt.cpp.tar.gz https://github.com/eclipse/paho.mqtt.cpp/archiv
 #   && mkdir -p /opt/mqtt/lib \
 #   && cp /usr/local/lib/libpaho* /opt/mqtt/lib \
   && rm -r paho.mqtt.cpp-1.2.0 build
-
-# Build libredwg
-# RUN wget -O libredwg.tar.gz https://ftp.gnu.org/gnu/libredwg/libredwg-0.12.4.tar.gz \
-#   && tar -xzf libredwg.tar.gz \
-#   && rm libredwg.tar.gz \
-#   && cd libredwg-0.12.4 \
-#   #&& ./configure --prefix=/opt/redwg --disable-bindings --enable-release \
-#   && ./configure --disable-bindings --enable-release \
-#   && make -j `nproc` \  
-#   && make install \
-#   # 直接生成在 /usr/local下，改用/opt/redwg下会出现编译通不过问题
-#   && echo "/opt/redwg/lib" >> /etc/ld.so.conf.d/redwg.conf \
-#   && mkdir -p /opt/redwg/lib \
-#   && cp /usr/local/lib/libredwg* /opt/redwg/lib \
-#   && cd - \
-#   && rm -r libredwg-0.12.4 \
-#   && ldconfig
-
 
 
 
