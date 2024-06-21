@@ -82,8 +82,8 @@ RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
   && rm ceres-solver-2.1.0* -rf && ldconfig
 
 # Install cartographer and cartographer_ros
-RUN rosdep init && rosdep update \
-  && mkdir /carto/src -p && cd /carto \
+RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+  && rosdep init && rosdep update \
   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
   && mkdir /carto/src -p && cd /carto/src \
   && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
