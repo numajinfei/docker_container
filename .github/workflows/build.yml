@@ -54,7 +54,7 @@ jobs:
           file: ./Dockerfile/ros_build.Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/ros1-neotic:feature_build
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/ros1-neotic:carto_build
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
           

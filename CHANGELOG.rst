@@ -1,6 +1,14 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Changelog for docker-container project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2.1.2 (2024-06-21)
+------------------
+* new images: ros::noetic + cartographer environment.
+
+2.1.1 (2023-08-28)
+------------------
+* update AI's dependence lib for PersonDetector and Measuring point planning.
+* by: jadehu
 
 2.1.0 (2023-08-25)
 ------------------

@@ -1,1 +1,3 @@
 docker run -itd --network host --name ros1_build1 ros:noetic
+
+docker run -itd --privileged -v /etc/localtime:/etc/localtime:ro -v /home/ubuntu/work:/work/ws --log-opt max-size=5g --log-opt max-file=50 --network host --name carto1 --restart  unless-stopped docker_container_ros1_build:latest
