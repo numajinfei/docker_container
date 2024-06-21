@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ros-${ROS_DISTRO}-costmap-converter \
   ros-${ROS_DISTRO}-tf2-geometry-msgs \
   ros-${ROS_DISTRO}-eigen-conversions \
+  ros-${ROS_DISTRO}-urdf \
 #   ros-${ROS_DISTRO}-move-base \
   ros-${ROS_DISTRO}-map-msgs \
   liborocos-bfl-dev \
@@ -44,6 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # cartographer dependence lib:
   libgoogle-glog-dev libgflags-dev libatlas-base-dev libeigen3-dev \
   liblua5.2-dev libcairo2-dev \
+  libgmock-dev libpcl-dev \
   python3-sphinx \
   python3-wstool \
   python3-rosdep \
