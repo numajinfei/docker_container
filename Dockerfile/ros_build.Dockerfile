@@ -91,7 +91,6 @@ RUN rosdep init && rosdep update \
   && tar -zxvf 1.0.0.tar.gz \
   && tar -zxvf 2.0.0.tar.gz \
   && cd cartographer-2.0.0/scripts \
-  && apt-get update && apt-get install liblua5.2-dev libcairo2-dev  ros-${ROS_DISTRO}-catkin -y \
   && ./install_abseil.sh \
   && cd .. && mkdir build && cd build \
   && cmake .. && make \
