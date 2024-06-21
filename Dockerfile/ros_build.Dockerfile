@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ros-${ROS_DISTRO}-pcl-ros \
   ros-${ROS_DISTRO}-costmap-converter \
   ros-${ROS_DISTRO}-tf2-geometry-msgs \
+  ros-${ROS_DISTRO}-eigen-conversions \
 #   ros-${ROS_DISTRO}-move-base \
   ros-${ROS_DISTRO}-map-msgs \
   liborocos-bfl-dev \
