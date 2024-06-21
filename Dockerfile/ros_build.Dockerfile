@@ -90,6 +90,7 @@ RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
   && tar -zxvf 1.0.0.tar.gz \
   && tar -zxvf 2.0.0.tar.gz \
+  && pwd && ls && cp cartographer* ./src -r \
   && cd /carto_ws/src/cartographer-2.0.0/scripts \
   && ./install_abseil.sh \
   && cd .. && mkdir build && cd build \
