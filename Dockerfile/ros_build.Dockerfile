@@ -83,20 +83,20 @@ RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
 
 # Install cartographer and cartographer_ros
 RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+  && mkdir /carto_ws/src -p  && cd /carto_ws \
   && rosdep init && rosdep update \
   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
-  && mkdir /carto/src -p && cd /carto/src \
   && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
   && tar -zxvf 1.0.0.tar.gz \
   && tar -zxvf 2.0.0.tar.gz \
-  && cd cartographer-2.0.0/scripts \
+  && cd /carto_ws/src/cartographer-2.0.0/scripts \
   && ./install_abseil.sh \
   && cd .. && mkdir build && cd build \
   && cmake .. && make \
   && make test && make install
 
-WORKDIR /carto
+WORKDIR /carto_ws
 RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install'
 
 # Install nlohmann json
