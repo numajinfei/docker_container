@@ -72,38 +72,88 @@ RUN git clone -b v3.6.0 https://github.com/protocolbuffers/protobuf.git \
   && make install \
   && ldconfig \
   && rm protobuf -rf \
-  && protoc --version
+  && protoc --version \
+  && mkdir /carto
 
 # Install ceres-slover
+# RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
+#   && tar -zxvf ceres-solver-2.1.0.tar.gz \
+#   && cd ceres-solver-2.1.0 \
+#   && mkdir build \
+#   && cd build \
+#   && cmake ..  \
+#   && make install \
+#   && rm ceres-solver-2.1.0.tar.gz -rf && ldconfig
+
+# # Install cartographer and cartographer_ros
+# RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+#   && mkdir /carto_ws/src -p  && cd /carto_ws \
+#   && rosdep init && rosdep update \
+#   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
+#   && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
+#   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
+#   && tar -zxvf 2.0.0.tar.gz \
+#   && tar -zxvf 1.0.0.tar.gz \
+#   && mv cartographer_ros-1.0.0 cartographer_ros \
+#   && mv cartographer-2.0.0 cartographer \
+#   && pwd && ls && mv cartographer* ./src \
+#   && cd /carto_ws/src/cartographer/scripts \
+#   && ./install_abseil.sh \
+#   && cd .. && mkdir build && cd build \
+#   && cmake .. && make \
+#   && make test && make install && ldconfig
+
+# WORKDIR /carto_ws
+# RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install'
+
+
+
+# Install cartographer and cartographer_ros
+# RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+#   && mkdir /carto_ws/src -p  && cd /carto_ws \
+#   && rosdep init && rosdep update \
+#   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
+#   && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
+#   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
+#   && tar -zxvf 2.0.0.tar.gz \
+#   && tar -zxvf 1.0.0.tar.gz \
+#   && mv cartographer_ros-1.0.0 cartographer_ros \
+#   && mv cartographer-2.0.0 cartographer \
+#   && pwd && ls && mv cartographer* ./src \
+#   && cd /carto_ws/src/cartographer/scripts \
+#   && ./install_abseil.sh \
+#   && cd .. && mkdir build && cd build \
+#   && cmake .. && make \
+#   && make test && make install && ldconfig
+
+WORKDIR /carto_ws
 RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
   && tar -zxvf ceres-solver-2.1.0.tar.gz \
   && cd ceres-solver-2.1.0 \
   && mkdir build \
   && cd build \
-  && cmake ..  \
-  && make install \
-  && rm ceres-solver-2.1.0.tar.gz -rf && ldconfig
+  && cmake .. -G Ninja \
+  && ninja && CTEST_OUTPUT_ON_FAILURE=1 ninja test \
+  && ninja install \
 
-# Install cartographer and cartographer_ros
-RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
-  && mkdir /carto_ws/src -p  && cd /carto_ws \
-  && rosdep init && rosdep update \
-  && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
-  && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
+RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
   && tar -zxvf 2.0.0.tar.gz \
   && tar -zxvf 1.0.0.tar.gz \
   && mv cartographer_ros-1.0.0 cartographer_ros \
   && mv cartographer-2.0.0 cartographer \
-  && pwd && ls && mv cartographer* ./src \
-  && cd /carto_ws/src/cartographer/scripts \
-  && ./install_abseil.sh \
-  && cd .. && mkdir build && cd build \
-  && cmake .. && make \
-  && make test && make install && ldconfig
+  && pwd && echo "####### current floder1:" && ls \
+  && /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+  && wstool init src
+  && mv cartographer* ./src \
+  && wstool update -t src \
+  && pwd && echo "####### current floder2:" && ls \
+  && echo "####### current src floder:" && ls ./src \
+  && rosdep update \
+  && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
+  && ./src/cartographer/scripts/install_abseil.sh
 
-WORKDIR /carto_ws
-RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install'
+RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install --use-ninja'
 
 # Install nlohmann json
 RUN wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp \
