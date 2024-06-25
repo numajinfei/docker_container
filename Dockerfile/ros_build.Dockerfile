@@ -149,7 +149,7 @@ RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/
   && wstool update -t src \
   && pwd && echo "####### current floder2:" && ls \
   && echo "####### current src floder:" && ls ./src \
-  && rosdep update \
+  && rosdep init && rosdep update \
   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
   && ./src/cartographer/scripts/install_abseil.sh
 
