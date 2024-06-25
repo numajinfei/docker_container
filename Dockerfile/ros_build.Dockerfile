@@ -89,16 +89,16 @@ RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
   && mkdir /carto_ws/src -p  && cd /carto_ws \
   && rosdep init && rosdep update \
   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
-  && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
-  && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
-  && tar -zxvf 1.0.0.tar.gz \
-  && tar -zxvf 2.0.0.tar.gz \
-  && pwd && ls && cp cartographer* ./src -r \
-  && cd /carto_ws/src/cartographer-2.0.0/scripts \
+  && wget -O cartographer.tar.gz https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
+  && wget -O cartographer_ros.tar.gz https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
+  && tar -zxvf cartographer.tar.gz \
+  && tar -zxvf cartographer_ros.tar.gz \
+  && pwd && ls && mv cartographer* ./src -r \
+  && cd /carto_ws/src/cartographer/scripts \
   && ./install_abseil.sh \
   && cd .. && mkdir build && cd build \
   && cmake .. && make \
-  && make test && make install
+  && make test && make install && ldconfig
 
 WORKDIR /carto_ws
 RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install'
