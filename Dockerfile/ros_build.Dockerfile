@@ -149,8 +149,8 @@ RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/
   && wstool update -t src \
   && pwd && echo "####### current floder2:" && ls \
   && echo "####### current src floder:" && ls ./src \
-  && rosdep init && rosdep update \
-  && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
+  && rosdep init && rosdep fix-permissions && rosdep update \
+  && rosdep install --from-paths ./src --ignore-src --rosdistro=${ROS_DISTRO} -y \
   && ./src/cartographer/scripts/install_abseil.sh
 
 RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install --use-ninja'
