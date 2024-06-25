@@ -134,7 +134,7 @@ RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
   && cd build \
   && cmake .. -G Ninja \
   && ninja && CTEST_OUTPUT_ON_FAILURE=1 ninja test \
-  && ninja install \
+  && ninja install
 
 RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
