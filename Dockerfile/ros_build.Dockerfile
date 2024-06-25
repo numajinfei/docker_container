@@ -144,7 +144,7 @@ RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/
   && mv cartographer-2.0.0 cartographer \
   && pwd && echo "####### current floder1:" && ls \
   && /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
-  && wstool init src
+  && wstool init src \
   && mv cartographer* ./src \
   && wstool update -t src \
   && pwd && echo "####### current floder2:" && ls \
