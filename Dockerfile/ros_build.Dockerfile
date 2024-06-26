@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   iputils-ping \
   libgpiod-dev \
   libyaml-cpp-dev \
+  libc++-dev libceres-dev \
 # nav and pcl:
   ros-${ROS_DISTRO}-pcl-conversions \
   ros-${ROS_DISTRO}-bondcpp \
@@ -150,6 +151,7 @@ RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/
   && pwd && echo "####### current floder2:" && ls \
   && echo "####### current src floder:" && ls ./src \
   && rosdep init && rosdep fix-permissions && rosdep update \
+#   && apt-mark hold libceres-dev \
   && rosdep install --from-paths ./src --ignore-src --rosdistro=${ROS_DISTRO} -y \
   && ./src/cartographer/scripts/install_abseil.sh
 
