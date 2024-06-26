@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libsdl-dev \
 # cartographer dependence lib:
   libgoogle-glog-dev libgflags-dev libatlas-base-dev libeigen3-dev \
-  libprotobuf-dev \
+  libprotobuf-dev protobuf-compiler \
   liblua5.2-dev libcairo2-dev \
   libgmock-dev libpcl-dev \
   python3-sphinx \
