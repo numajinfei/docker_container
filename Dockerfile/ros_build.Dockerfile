@@ -39,6 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #   ros-${ROS_DISTRO}-move-base \
   ros-${ROS_DISTRO}-map-msgs \
   ros-${ROS_DISTRO}-robot-state-publisher \
+  ros-${ROS_DISTRO}-rviz \
   liborocos-bfl-dev \
   graphicsmagick* \
   libsuitesparse-dev \
