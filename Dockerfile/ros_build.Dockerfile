@@ -140,23 +140,40 @@ RUN wget http://ceres-solver.org/ceres-solver-2.1.0.tar.gz \
   && ninja && CTEST_OUTPUT_ON_FAILURE=1 ninja test \
   && ninja install
 
-RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
+# RUN wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
+#   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
+#   && tar -zxvf 2.0.0.tar.gz \
+#   && tar -zxvf 1.0.0.tar.gz \
+#   && mv cartographer_ros-1.0.0 cartographer_ros \
+#   && mv cartographer-2.0.0 cartographer \
+#   && pwd && echo "####### current floder1:" && ls \
+#   && /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+#   && wstool init src \
+#   && mv cartographer* ./src \
+#   && wstool update -t src \
+#   && pwd && echo "####### current floder2:" && ls \
+#   && echo "####### current src floder:" && ls ./src \
+#   && rosdep init && rosdep fix-permissions && rosdep update \
+# #   && apt-mark hold libceres-dev \
+#   && rosdep install --from-paths ./src --ignore-src --rosdistro=${ROS_DISTRO} -y \
+#   && ./src/cartographer/scripts/install_abseil.sh
+
+RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
+  && mkdir /carto_ws/src -p  && cd /carto_ws \
+  && rosdep init && rosdep update \
+  && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
+  && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
   && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
   && tar -zxvf 2.0.0.tar.gz \
   && tar -zxvf 1.0.0.tar.gz \
   && mv cartographer_ros-1.0.0 cartographer_ros \
   && mv cartographer-2.0.0 cartographer \
-  && pwd && echo "####### current floder1:" && ls \
-  && /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
-  && wstool init src \
-  && mv cartographer* ./src \
-  && wstool update -t src \
-  && pwd && echo "####### current floder2:" && ls \
-  && echo "####### current src floder:" && ls ./src \
-  && rosdep init && rosdep fix-permissions && rosdep update \
-#   && apt-mark hold libceres-dev \
-  && rosdep install --from-paths ./src --ignore-src --rosdistro=${ROS_DISTRO} -y \
-  && ./src/cartographer/scripts/install_abseil.sh
+  && pwd && ls && mv cartographer* ./src \
+  && cd /carto_ws/src/cartographer/scripts \
+  && ./install_abseil.sh \
+  && cd .. && mkdir build && cd build \
+  && cmake .. && make \
+  && make test && make install && ldconfig
 
 RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install --use-ninja'
 
