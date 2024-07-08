@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libsdl-dev \
 # cartographer dependence lib:
   libgoogle-glog-dev libgflags-dev libatlas-base-dev libeigen3-dev \
-  libprotobuf-dev protobuf-compiler libprotoc-dev python3-sphinx sphinx-common sphinx-doc \
+#  libprotobuf-dev protobuf-compiler libprotoc-dev python3-sphinx sphinx-common sphinx-doc \
   liblua5.2-dev libcairo2-dev \
   libgmock-dev libpcl-dev \
   python3-sphinx \
@@ -162,18 +162,16 @@ RUN /bin/bash -c 'rm /etc/ros/rosdep/sources.list.d/20-default.list' \
   && mkdir /carto_ws/src -p  && cd /carto_ws \
   && rosdep init && rosdep update \
   && rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y \
-  && wget https://github.com/cartographer-project/cartographer/archive/refs/tags/2.0.0.tar.gz \
-  && wget https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
-  && tar -zxvf 2.0.0.tar.gz \
-  && tar -zxvf 1.0.0.tar.gz \
+  && wget -O cartographer.tar.gz https://github.com/cartographer-project/cartographer/archive/refs/tags/1.0.0.tar.gz \
+  && wget -O cartographer_ros.tar.gz https://github.com/cartographer-project/cartographer_ros/archive/refs/tags/1.0.0.tar.gz \
+  && tar -zxvf cartographer.tar.gz \
+  && tar -zxvf cartographer_ros.tar.gz \
   && mv cartographer_ros-1.0.0 cartographer_ros \
-  && mv cartographer-2.0.0 cartographer \
+  && mv cartographer-1.0.0 cartographer \
   && pwd && ls && mv cartographer* ./src \
   && cd /carto_ws/src/cartographer/scripts \
-  && ./install_abseil.sh \
-  && cd .. && mkdir build && cd build \
-  && cmake .. && make \
-  && make test && make install && ldconfig
+  && ./install_abseil.sh
+
 
 RUN /bin/bash -c 'source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make_isolated --install --use-ninja'
 
